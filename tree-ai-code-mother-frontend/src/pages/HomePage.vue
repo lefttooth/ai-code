@@ -4,6 +4,6 @@
 
 <template>
   <main>
-主页
+    主页
   </main>
 </template>

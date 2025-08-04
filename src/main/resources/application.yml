@@ -1,6 +1,11 @@
 spring:
   application:
     name: tree-ai-code-mother-backend
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/tree
+    username: root
+    password: root
 server:
   port: 8123
   servlet:

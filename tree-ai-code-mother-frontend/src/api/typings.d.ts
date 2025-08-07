@@ -1,4 +1,20 @@
 declare namespace API {
+  type App = {
+    id?: number
+    appName?: string
+    cover?: string
+    initPrompt?: string
+    codeGenType?: string
+    deployKey?: string
+    deployedTime?: string
+    priority?: number
+    userId?: number
+    editTime?: string
+    createTime?: string
+    updateTime?: string
+    isDelete?: number
+  }
+
   type AppAddRequest = {
     initPrompt?: string
   }
@@ -79,6 +95,12 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponsePageChatHistory = {
+    code?: number
+    data?: PageChatHistory
+    message?: string
+  }
+
   type BaseResponsePageUserVO = {
     code?: number
     data?: PageUserVO
@@ -103,6 +125,30 @@ declare namespace API {
     message?: string
   }
 
+  type ChatHistory = {
+    id?: number
+    message?: string
+    messageType?: string
+    appId?: number
+    userId?: number
+    createTime?: string
+    updateTime?: string
+    isDelete?: number
+  }
+
+  type ChatHistoryQueryRequest = {
+    pageNum?: number
+    pageSize?: number
+    sortField?: string
+    sortOrder?: string
+    id?: number
+    message?: string
+    messageType?: string
+    appId?: number
+    userId?: number
+    lastCreateTime?: string
+  }
+
   type chatToGenCodeParams = {
     appId: number
     message: string
@@ -120,12 +166,22 @@ declare namespace API {
     id: number
   }
 
+  type getInfoParams = {
+    id: number
+  }
+
   type getUserByIdParams = {
     id: number
   }
 
   type getUserVOByIdParams = {
     id: number
+  }
+
+  type listAppChatHistoryParams = {
+    appId: number
+    pageSize?: number
+    lastCreateTime?: string
   }
 
   type LoginUserVO = {
@@ -139,6 +195,19 @@ declare namespace API {
     updateTime?: string
   }
 
+  type page1Params = {
+    page: PageApp
+  }
+
+  type PageApp = {
+    records?: App[]
+    pageNumber?: number
+    pageSize?: number
+    totalPage?: number
+    totalRow?: number
+    optimizeCountQuery?: boolean
+  }
+
   type PageAppVO = {
     records?: AppVO[]
     pageNumber?: number
@@ -148,6 +217,19 @@ declare namespace API {
     optimizeCountQuery?: boolean
   }
 
+  type PageChatHistory = {
+    records?: ChatHistory[]
+    pageNumber?: number
+    pageSize?: number
+    totalPage?: number
+    totalRow?: number
+    optimizeCountQuery?: boolean
+  }
+
+  type pageParams = {
+    page: PageChatHistory
+  }
+
   type PageUserVO = {
     records?: UserVO[]
     pageNumber?: number
@@ -155,6 +237,10 @@ declare namespace API {
     totalPage?: number
     totalRow?: number
     optimizeCountQuery?: boolean
+  }
+
+  type removeParams = {
+    id: number
   }
 
   type ServerSentEventString = true

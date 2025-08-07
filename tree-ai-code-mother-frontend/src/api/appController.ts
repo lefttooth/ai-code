@@ -140,6 +140,14 @@ export async function listGoodAppVoByPage(
   })
 }
 
+/** 此处后端没有提供注释 GET /app/list */
+export async function list1(options?: { [key: string]: any }) {
+  return request<API.App[]>('/app/list', {
+    method: 'GET',
+    ...(options || {}),
+  })
+}
+
 /** 此处后端没有提供注释 POST /app/my/list/page/vo */
 export async function listMyAppVoByPage(
   body: API.AppQueryRequest,
@@ -151,6 +159,23 @@ export async function listMyAppVoByPage(
       'Content-Type': 'application/json',
     },
     data: body,
+    ...(options || {}),
+  })
+}
+
+/** 此处后端没有提供注释 GET /app/page */
+export async function page1(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.page1Params,
+  options?: { [key: string]: any }
+) {
+  return request<API.PageApp>('/app/page', {
+    method: 'GET',
+    params: {
+      ...params,
+      page: undefined,
+      ...params['page'],
+    },
     ...(options || {}),
   })
 }

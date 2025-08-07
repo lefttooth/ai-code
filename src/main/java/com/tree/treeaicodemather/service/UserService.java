@@ -1,7 +1,5 @@
 package com.tree.treeaicodemather.service;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.collection.CollUtil;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.service.IService;
 import com.tree.treeaicodemather.model.dto.UserQueryRequest;
@@ -9,11 +7,8 @@ import com.tree.treeaicodemather.model.entity.User;
 import com.tree.treeaicodemather.vo.LoginUserVO;
 import com.tree.treeaicodemather.vo.UserVO;
 import jakarta.servlet.http.HttpServletRequest;
-import org.w3c.dom.ls.LSInput;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 用户 服务层。

@@ -2,7 +2,7 @@ package com.tree.treeaicodemather.ai;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.tree.treeaicodemather.ai.tools.FileWriteTool;
+import com.tree.treeaicodemather.ai.tools.ToolManager;
 import com.tree.treeaicodemather.exception.BusinessException;
 import com.tree.treeaicodemather.exception.ErrorCode;
 import com.tree.treeaicodemather.model.enums.CodeGenTypeEnum;
@@ -38,6 +38,10 @@ import java.time.Duration;
 
         @Resource
         private ChatHistoryService chatHistoryService;
+
+        @Resource
+        private ToolManager toolManager;
+
 
 
 
@@ -90,7 +94,7 @@ import java.time.Duration;
             case VUE_PROJECT -> AiServices.builder(AiCodeGeneratorService.class)
                     .streamingChatModel(reasoningStreamingChatModel)
                     .chatMemoryProvider(memoryId -> chatMemory)
-                    .tools(new FileWriteTool())
+                    .tools(toolManager.getAllTools())
                     .hallucinatedToolNameStrategy(toolExecutionRequest -> ToolExecutionResultMessage.from(
                             toolExecutionRequest, "Error: there is no tool called " + toolExecutionRequest.name()
                     ))

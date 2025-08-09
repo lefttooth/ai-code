@@ -1,7 +1,11 @@
 <template>
   <div class="app-card" :class="{ 'app-card--featured': featured }">
     <div class="app-preview">
-      <img v-if="app.cover" :src="app.cover" :alt="app.appName" />
+      <img
+        v-if="app.cover"
+        :src="'https://' + app.cover"
+        :alt="app.appName"
+      />
       <div v-else class="app-placeholder">
         <span>🤖</span>
       </div>

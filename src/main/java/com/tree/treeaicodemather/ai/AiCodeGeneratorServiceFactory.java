@@ -2,6 +2,7 @@ package com.tree.treeaicodemather.ai;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.tree.treeaicodemather.ai.guardrail.PromptSafetyInputGuardrail;
 import com.tree.treeaicodemather.ai.tools.ToolManager;
 import com.tree.treeaicodemather.exception.BusinessException;
 import com.tree.treeaicodemather.exception.ErrorCode;
@@ -73,6 +74,10 @@ import java.time.Duration;
                         .hallucinatedToolNameStrategy(toolExecutionRequest -> ToolExecutionResultMessage.from(
                                 toolExecutionRequest, "Error: there is no tool called " + toolExecutionRequest.name()
                         ))
+
+                        .inputGuardrails(new PromptSafetyInputGuardrail())  // 添加输入护轨
+
+
                         .build();
             }
             case HTML, MULTI_FILE -> {
@@ -82,6 +87,9 @@ import java.time.Duration;
                         .chatModel(chatModel)
                         .streamingChatModel(openAiStreamingChatModel)
                         .chatMemory(chatMemory)
+
+                        .inputGuardrails(new PromptSafetyInputGuardrail())  // 添加输入护轨
+
                         .build();
             }
             default -> throw new BusinessException(ErrorCode.SYSTEM_ERROR,

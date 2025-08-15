@@ -5,7 +5,6 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
-import com.tree.treeaicodemather.ai.AiCodeGenTypeRoutingService;
 import com.tree.treeaicodemather.annotation.AuthCheck;
 import com.tree.treeaicodemather.common.BaseResponse;
 import com.tree.treeaicodemather.common.DeleteRequest;
@@ -18,7 +17,8 @@ import com.tree.treeaicodemather.exception.ThrowUtils;
 import com.tree.treeaicodemather.model.dto.app.*;
 import com.tree.treeaicodemather.model.entity.App;
 import com.tree.treeaicodemather.model.entity.User;
-import com.tree.treeaicodemather.model.enums.CodeGenTypeEnum;
+import com.tree.treeaicodemather.ratelimit.annotation.RateLimit;
+import com.tree.treeaicodemather.ratelimit.enums.RateLimitType;
 import com.tree.treeaicodemather.service.AppService;
 import com.tree.treeaicodemather.service.ProjectDownloadService;
 import com.tree.treeaicodemather.service.UserService;
@@ -26,7 +26,7 @@ import com.tree.treeaicodemather.vo.AppVO;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.*;
@@ -58,6 +58,8 @@ public class AppController {
 
 
     @GetMapping(value = "/chat/gen/code", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+
+    @RateLimit(limitType = RateLimitType.USER, rate = 5, rateInterval = 60, message = "AI 对话请求过于频繁，请稍后再试")
     public Flux<ServerSentEvent<String>> chatToGenCode(@RequestParam Long appId,
                                                        @RequestParam String message,
                                                        HttpServletRequest request) {
@@ -255,6 +257,11 @@ public class AppController {
      * @return 精选应用列表
      */
     @PostMapping("/good/list/page/vo")
+    @Cacheable(
+            value = "good_app_page",
+            key = "T(com.yupi.yuaicodemother.utils.CacheKeyUtils).generateKey(#appQueryRequest)",
+            condition = "#appQueryRequest.pageNum <= 10"
+    )
     public BaseResponse<Page<AppVO>> listGoodAppVOByPage(@RequestBody AppQueryRequest appQueryRequest) {
         ThrowUtils.throwIf(appQueryRequest == null, ErrorCode.PARAMS_ERROR);
         // 限制每页最多 20 个
